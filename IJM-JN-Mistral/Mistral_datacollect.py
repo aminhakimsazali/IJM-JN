@@ -38,7 +38,7 @@ import csv
 #   port = serial.Serial("/dev/ttyS0",baudrate = 921600, timeout = 0.5)
 
 #Defined for Jetson Nano UART port
-port = serial.Serial("/dev/ttyTHS1",baudrate = 921600, timeout = 0.5)
+port = serial.Serial("/dev/ttyUSB1",baudrate = 921600, timeout = 0.5)
 
 tmd = trafficMD.TrafficMD(port)
 
@@ -71,7 +71,7 @@ def uartGetdata(name):
             time_start = datetime.now()
         
         if dck:
-            # print("V6:V7:V8:V9 = length([{:d},{:d},{:d},{:d}])".format(len(v6),len(v7),len(v8),len(v9)))
+            print("V6:V7:V8:V9 = length([{:d},{:d},{:d},{:d}])".format(len(v6),len(v7),len(v8),len(v9)))
             
             # print(v6)
 

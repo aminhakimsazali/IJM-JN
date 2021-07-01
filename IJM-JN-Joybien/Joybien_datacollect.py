@@ -71,7 +71,7 @@ def uartGetdata(name):
             time_start = datetime.now()
         
         if dck:
-            # print("V6:V7:V8:V9 = length([{:d},{:d},{:d},{:d}])".format(len(v6),len(v7),len(v8),len(v9)))
+            print("V6:V7:V8:V9 = length([{:d},{:d},{:d},{:d}])".format(len(v6),len(v7),len(v8),len(v9)))
             
             # print(v6)
 
