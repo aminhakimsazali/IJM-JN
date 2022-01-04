@@ -6,7 +6,7 @@ import datetime as dt
 import csv
 
 # Change the configuration file name
-configFileName = '68xx_traffic_monitoring_70m_MIMO_3D.cfg'
+configFileName = '/home/pi/Downloads/IJM-JN-Mistral/68xx_traffic_monitoring_70m_MIMO_3D.cfg'
 
 CLIport = {}
 Dataport = {}
@@ -25,12 +25,12 @@ def serialConfig(configFileName):
     # Open the serial ports for the configuration and the data ports
     
     # Raspberry pi
-    # CLIport = serial.Serial('/dev/ttyUSB0', 115200)
-    # Dataport = serial.Serial('/dev/ttyUSB1', 921600)
+    CLIport = serial.Serial('/dev/ttyUSB0', 115200)
+    Dataport = serial.Serial('/dev/ttyUSB1', 921600)
     
     # Windows
-    CLIport = serial.Serial('COM3', 115200)
-    Dataport = serial.Serial('COM4', 921600)
+    #CLIport = serial.Serial('COM3', 115200)
+    #Dataport = serial.Serial('COM4', 921600)
 
     #Jetson Nano
     #port = serial.Serial("/dev/ttyUSB1",baudrate = 921600, timeout = 0.5)
@@ -54,7 +54,7 @@ def uartGetdata(name):
     print("mmWaveRADAR@Petronas: {:} Raw-Point-Clouds:".format(name))
     port.flushInput()
         
-    with open("count.txt", "r") as fopen:
+    with open("/home/pi/Downloads/IJM-JN-Mistral/count.txt", "r") as fopen:
         count = fopen.readline()
 
     print("Count: ", int(count))
@@ -65,9 +65,8 @@ def uartGetdata(name):
     with open("count.txt", "w") as fopen:
         fopen.write(str(i+1))
         
-        
-
     while True:
+    # while (dt.datetime.now() - start).seconds < 10: 
         #hdr = tmd.getHeader()
         
         (dck,v6,v7,v8,v9)=tmd.tlvRead(False)
@@ -75,8 +74,18 @@ def uartGetdata(name):
         time_end = dt.datetime.now()
         time_diff = time_end - time_start
         total_seconds = time_diff.total_seconds()
-        if  total_seconds > 900: #15 minutes
+        
+        if ((dt.datetime.now().minute == 0) or (dt.datetime.now().minute == 25) or (dt.datetime.now().minute == 45)) and (dt.datetime.now().second == 0) and hasIncreased == False:
+            hasIncreased = True
+            # every 20 minutes, increase increment
+            # save to new file
+            i += 1
+            with open("count.txt", "w") as fopen:
+                fopen.write(str(i))   
             time_start = dt.datetime.now()
+
+        if ((dt.datetime.now().minute == 1) or (dt.datetime.now().minute == 26) or (dt.datetime.now().minute == 46)) and (dt.datetime.now().second == 0):
+            hasIncreased = False
         
         if dck:
             print("V6:V7:V8:V9 = length([{:d},{:d},{:d},{:d}])".format(len(v6),len(v7),len(v8),len(v9)))
@@ -87,7 +96,7 @@ def uartGetdata(name):
             timestr = time_stamp.strftime("%d %m %Y %H:%M:%S.%f")
 
           
-            with open("v6 data {}.csv".format(i),"a") as p8_v6:
+            with open("/home/pi/Downloads/data/v6 data {}.csv".format(i),"a") as p8_v6:
                 writer_p8_v6 = csv.writer(p8_v6,delimiter=",",quoting=csv.QUOTE_ALL)
                 writer_p8_v6.writerow([str(timestr), v6])
  

@@ -6,7 +6,7 @@ import datetime as dt
 import csv
 
 # Change the configuration file name
-configFileName = '68xx_traffic_monitoring_70m_MIMO_3D.cfg'
+configFileName = 'chirp_config_3d.cfg'
 
 CLIport = {}
 Dataport = {}
@@ -25,17 +25,12 @@ def serialConfig(configFileName):
     # Open the serial ports for the configuration and the data ports
     
     # Raspberry pi
-    # CLIport = serial.Serial('/dev/ttyUSB0', 115200)
-    # Dataport = serial.Serial('/dev/ttyUSB1', 921600)
+    CLIport = serial.Serial('/dev/ttyUSB0', 115200)
+    Dataport = serial.Serial('/dev/ttyUSB1', 921600)
     
     # Windows
-    CLIport = serial.Serial('COM3', 115200)
-    Dataport = serial.Serial('COM4', 921600)
-
-    #Jetson Nano
-    #port = serial.Serial("/dev/ttyUSB1",baudrate = 921600, timeout = 0.5)
-    # CLIport = serial.Serial('/dev/ttyUSB0', 115200)
-    # Dataport = serial.Serial('/dev/ttyUSB1', 921600)
+    #CLIport = serial.Serial('COM3', 115200)
+    #Dataport = serial.Serial('COM4', 921600)
 
     # Read the configuration file and send it to the board
     config = [line.rstrip('\r\n') for line in open(configFileName)]
@@ -75,7 +70,7 @@ def uartGetdata(name):
         time_end = dt.datetime.now()
         time_diff = time_end - time_start
         total_seconds = time_diff.total_seconds()
-        if  total_seconds > 900: #15 minutes
+        if  total_seconds > 900:
             time_start = dt.datetime.now()
         
         if dck:
@@ -92,7 +87,6 @@ def uartGetdata(name):
                 writer_p8_v6.writerow([str(timestr), v6])
  
 uartGetdata("Raw data collection for mmWave Mistral IWR6843AoP")
-
 
 
 

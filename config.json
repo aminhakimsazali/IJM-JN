@@ -1,0 +1,10 @@
+{
+	"file" : "v6 data 30 - FS 50.csv",
+	"start_time" :"2021-06-30 17:22:00",
+	"end_time": "2021-06-30 17:49:00",
+	"duration" : 0.8,
+	"lane" : 3,
+	"counting_threshold" : 3,
+	"classification_threshold" : 40
+
+}
